@@ -19,7 +19,7 @@ jobs:
       - name: Build Docker image
         run: |
           cd microservice1
-          docker build -t my-flask-app .
+          docker build -t mohamadmas/checkpoint-mohamad .
 
       - name: Push Docker image to Docker Hub
         env:
@@ -27,5 +27,4 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
-          docker tag my-flask-app mohamadmas/checkpoint-mohamad:latest
-          docker push $DOCKER_USERNAME/my-flask-app:latest
+          docker push mohamadmas/checkpoint-mohamad:latest
