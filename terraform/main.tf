@@ -3,11 +3,6 @@ module "vpc" {
   vpc_cidr = var.vpc_cidr
 }
 
-module "elb" {
-  source     = "./modules/elb"
-  vpc_id     = module.vpc.vpc_id
-  subnet_ids = module.vpc.public_subnets
-}
 
 module "sqs" {
   source = "./modules/sqs"
@@ -17,7 +12,7 @@ module "s3" {
   source = "./modules/s3"
 }
 
-/*module "eks" {
+module "eks" {
   source          = "terraform-aws-modules/eks/aws"
   cluster_name    = var.eks_cluster_name
   cluster_version = "1.29"
@@ -36,9 +31,9 @@ module "s3" {
       instance_types = ["t3.medium"]
     }
   }
-}*/
+}
 
-module "ecs" {
+/*module "ecs" {
   source       = "terraform-aws-modules/ecs/aws"
   cluster_name = var.ecs_cluster_name
 }
@@ -78,4 +73,4 @@ module "ecs_service" {
       ]
     }
   }
-}
+}*/

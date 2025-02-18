@@ -1,4 +1,4 @@
-/*terraform {
+terraform {
   backend "s3" {
     bucket         = "checkpoint-state-bucket-mohamad"
     key            = "terraform.tfstate"
@@ -6,4 +6,4 @@
     encrypt        = true
     dynamodb_table = "terraform-locks"
   }
-}*/
+}
