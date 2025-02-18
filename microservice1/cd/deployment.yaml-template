@@ -17,4 +17,3 @@ spec:
         image: mohamadmas/checkpoint-mohamad:latest
         ports:
         - containerPort: 8080
-
