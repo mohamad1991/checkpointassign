@@ -7,10 +7,13 @@ on:
     paths:
       - 'microservice1/**'
 
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
 
     steps:
       - name: Checkout code
@@ -23,16 +26,21 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Set up kubectl
-        uses: eks-actions/eks-kubectl-action@v2
-        with:
-          cluster-name: ${{ env.EKS_CLUSTER_NAME }}
-          region: ${{ env.AWS_REGION }}
+      - name: Install kubectl
+        run: |
+          curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+          chmod +x ./kubectl
+          sudo mv ./kubectl /usr/local/bin/kubectl
+
+      - name: Configure kubectl to use EKS
+        run: |
+          aws eks --region ${{ env.AWS_REGION }} update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }}
 
       - name: Deploy to EKS
         run: |
-          kubectl apply -f deployment.yaml
-          kubectl apply -f service.yaml
+          mv microservice1/deployment.yaml-template microservice1/deployment.yaml 
+          kubectl apply -f microservice1/deployment.yaml
+          kubectl apply -f microservice1/service.yaml
 
       - name: Verify Deployment
         run: |
