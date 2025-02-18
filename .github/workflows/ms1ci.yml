@@ -27,5 +27,5 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
-          docker tag my-flask-app $DOCKER_USERNAME/my-flask-app:latest
+          docker tag my-flask-app mohamadmas/checkpoint-mohamad:latest
           docker push $DOCKER_USERNAME/my-flask-app:latest
