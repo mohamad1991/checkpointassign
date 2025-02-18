@@ -4,9 +4,14 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'microservice1/**'
   pull_request:
     branches:
       - main
+    paths:
+      - 'microservice1/**'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,7 +23,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cd microservice1
+          cd microservice1/ci
           docker build -t mohamadmas/checkpoint-mohamad .
 
       - name: Push Docker image to Docker Hub
