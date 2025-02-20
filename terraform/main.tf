@@ -8,6 +8,33 @@ module "sqs" {
   source = "./modules/sqs"
 }
 
+resource "aws_security_group" "lb_sg" {
+  name        = "elb-security-group"
+  description = "Allow inbound HTTP traffic"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+module "elb" {
+  source = "./modules/elb"
+  subnet = module.vpc.public_subnets
+  security_group = [aws_security_group.lb_sg.id]
+  vpc = module.vpc.vpc_id
+}
+
 module "s3" {
   source = "./modules/s3"
 }
