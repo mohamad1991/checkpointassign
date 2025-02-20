@@ -1,11 +1,11 @@
-name: Deploy to EKS
+name: Deploy to EKS2
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'microservice1/**'
+      - 'microservice2/**'
 
 jobs:
   deploy:
@@ -34,9 +34,11 @@ jobs:
 
       - name: Deploy to EKS
         run: |
-          mv microservice1/cd/deployment.yaml-template microservice1/cd/deployment.yaml 
-          kubectl apply -f microservice1/deployment.yaml
-          kubectl apply -f microservice1/service.yaml
+          mv microservice2/deployment.yaml-template microservice2/deployment.yaml
+          sed -i 's|#SQS_QUEUE_URL#|${{ secrets.SQS_QUEUE_URL }}|g' microservice2/cd/deployment.yaml
+          sed -i 's|#S3_BUCKET_NAME#|${{ secrets.S3_NAME }}|g' microservice2/cd/deployment.yaml
+          kubectl apply -f microservice2/deployment.yaml
+          kubectl apply -f microservice2/service.yaml
 
       - name: Verify Deployment
         run: |

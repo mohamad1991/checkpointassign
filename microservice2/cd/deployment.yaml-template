@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sqs-to-s3
+  labels:
+    app: sqs-to-s3
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sqs-to-s3
+  template:
+    metadata:
+      labels:
+        app: sqs-to-s3
+    spec:
+      containers:
+      - name: sqs-to-s3
+        image: mohamadmas/checkpoint-mohamad-2:latest
+        env:
+        - name: AWS_REGION
+          value: "us-west-1"
+        - name: SQS_QUEUE_URL
+          value: #SQS_QUEUE_URL#
+        - name: S3_BUCKET_NAME
+          value: #S3_BUCKET_NAME#
+        - name: POLLING_INTERVAL
+          value: "10"
